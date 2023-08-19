@@ -1,42 +1,54 @@
 #include <bits/stdc++.h>
+#include <algorithm>
 
 using namespace std;
 
-int distance(const int& a, const int &b) {
-  return a - b < 0 ? (a - b) * -1 : a - b;
+int find(vector<int> arr, int toFind) {
+  for (int i = 0; i < arr.size(); i++) {
+    if (arr[i] == toFind) return i;
+  }
+
+  return -1;
+}
+
+int distance(const int &a, const int &b) {
+  return abs(abs(a) - abs(b));
 }
 
 vector<int> findClosestElements(vector<int> arr, int k, int x) {
-  deque<int> d;
+  int index = find(arr, x);
 
-  int startIndex;
-  auto start = find(arr.begin(), arr.end(), x);
-  startIndex = start != arr.end() ? start - arr.begin() : -1;
+  if (index == -1) return vector<int> ();
 
-  d.push_front(arr[startIndex]);
-  
-  int left = startIndex - 1, right = startIndex + 1;
+  int left = index - 1, right = index + 1;
   for (int i = 0; i < k - 1; i++) {
-    if (distance(arr[left], x) <= distance(arr[right], x)) {
-      d.push_front(arr[left--]);
-    } else {
-      d.push_back(arr[right++]);
+    if (left <= -1) {
+      if (right <= arr.size()) right++;
+      else break;
+    } else if (right > arr.size()) {
+      if (left > -1) left--;
+      else break;
     }
+    distance(arr[left], x) <= distance(arr[right], x) ? left-- : right++; 
   }
 
-  vector<int> v;
-  move(begin(d), end(d), back_inserter(v));
-  return v;
+  vector<int> result;
+  for (int i = left + 1; i < right; i++) {
+    result.push_back(arr[i]);
+  }
+
+  return result;
 }
 
 int main() {
-  vector<int> arr = {1, 2, 3, 10, 20};
-  int k = 3, x = 3;
-  vector<int> results = findClosestElements(arr, k, x);
+  vector<int> arr = {1, 2, 3, 4, 5};
+  int k = 4, x = 3;
 
-  for (auto i : results) {
-    cout << i << ' ';
+  vector<int> res = findClosestElements(arr, k, x);
+
+  for (const auto& i : res) {
+    cout << i << endl;
   }
-
+  
   return 0;
 }
