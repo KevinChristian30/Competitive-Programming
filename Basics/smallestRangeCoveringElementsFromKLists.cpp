@@ -30,12 +30,20 @@ vector<int> smallestRange(vector<vector<int>> nums) {
     temp.push_back(nums[0][i]);
 
     for (int j = 1; j < numberOfArrays; j++) {
-      int nearestElementIndex;
+      int nearestElementIndex, minimumDifference = INT_MAX;
 
       for (int k = 0; k < temp.size(); k++) {
         int tempNearestElementIndex = findNearestElement(nums[j], temp[k]);
 
+        vector<int> innerTemp(temp);
+        innerTemp.push_back(nums[j][tempNearestElementIndex]);
+        sort(innerTemp.begin(), innerTemp.end());
 
+        int diff = difference(innerTemp[0], innerTemp[temp.size() - 1]);
+        if (diff < minimumDifference) {
+          minimumDifference = diff;
+          nearestElementIndex = tempNearestElementIndex;
+        }
       }
 
       temp.push_back(nums[j][nearestElementIndex]);
