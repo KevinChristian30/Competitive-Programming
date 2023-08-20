@@ -1,8 +1,55 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
+int difference(const int &a, const int &b) {
+  return abs(a - b);
+}
+
+int findNearestElement(vector<int> arr, int toFind) {
+  int diff = INT_MAX, resultIndex = -1;
+
+  for (int i = 0; i < arr.size(); i++) {
+    int temp = difference(arr[i], toFind);
+    if (temp < diff) {
+      diff = temp;
+      resultIndex = i;
+    }
+  }
+
+  return resultIndex;
+}
+
 vector<int> smallestRange(vector<vector<int>> nums) {
-  // Todo: LeetCode Hard (I'll Try again someday)
+  int numberOfArrays = nums.size();
+
+  int left = 0, right = INT_MAX;
+  
+  for (int i = 0; i < nums[0].size(); i++) {
+    vector<int> temp;
+    temp.push_back(nums[0][i]);
+
+    for (int j = 1; j < numberOfArrays; j++) {
+      int nearestElementIndex;
+
+      for (int k = 0; k < temp.size(); k++) {
+        int tempNearestElementIndex = findNearestElement(nums[j], temp[k]);
+
+
+      }
+
+      temp.push_back(nums[j][nearestElementIndex]);
+    }
+
+    sort(temp.begin(), temp.end());
+
+    if (difference(temp[0], temp[temp.size() - 1]) <= difference(right, left)) {
+      left = temp[0];
+      right = temp[temp.size() - 1];
+    }
+  } 
+  
+  return vector<int>() = {left, right};
 }
 
 int main() {
