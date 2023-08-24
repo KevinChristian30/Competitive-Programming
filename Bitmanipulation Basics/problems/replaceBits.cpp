@@ -11,34 +11,38 @@ N = 10000000000 (1024)
 M = 10101 (21)
 i = 2
 j = 6
-Output: 1001010100 (596)
+Output: 10001010100 (1108)
 
 */
 
 int replaceBits(int N, int M, int i, int j) {
   // 1. Make Mask
   // - Left Mask
-  // 111110000000
+  // 11110000000
   int leftMask = (~0) << (j + 1);
 
   // - Right Mask
-  // 000000000011
+  // 00000000011
   int rightMask = (1 << i) - 1;
 
-  // 111110000000
-  // 000000000011
-  // 111110000011
+  // 11110000000
+  // 00000000011
+  // 11110000011
   int mask = leftMask | rightMask;
-  
-  // Apply M to Mask, but M must be shifted to the left
-  // 000001010100
-  // 111110000011
-  // 111111010100
-  mask |= M << i;
 
-  // Todo: Not Finished (Wrong Answer)
+  // Clear the values with the mask
+  // 10000000000
+  // 11110000011
+  // 10000000000
+  N &= mask;
 
-  return mask;
+  // Apply M to N, but M must be shifted to the left
+  // 00001010100
+  // 10000000000
+  // 10001010100
+  N |= (M << i);
+
+  return N;
 }
 
 int main() {
